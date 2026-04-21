@@ -1,17 +1,17 @@
 {
-  "dependencies": {
-    "chalk": "^4.1.2"
-  },
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "devDependencies": {},
+  "description": "Backend server for fullstack app",
+  "main": "server.js",
+  "type": "commonjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "test": "echo \"No tests\""
   },
-  "keywords": [],
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "cors": "^2.8.5"
+  },
   "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "license": "ISC"
 }
