@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import API_BASE_URL from "./config";
 
-function Dashboard() {
+function Dashboard({ onLogout }) {
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const [files, setFiles] = useState([]);
@@ -11,6 +11,7 @@ function Dashboard() {
   const [saved, setSaved] = useState({});
   const [comments, setComments] = useState({});
   const [newComment, setNewComment] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   // 🔹 Fetch files
   const fetchFiles = async () => {
@@ -29,6 +30,7 @@ function Dashboard() {
 
   // 🔹 Upload
   const handleUpload = async () => {
+    if (isUploading) return;
     const selectedFile = file || fileInputRef.current?.files?.[0];
     if (!selectedFile) return alert("Select file first");
 
@@ -36,6 +38,7 @@ function Dashboard() {
     formData.append("file", selectedFile);
 
     try {
+      setIsUploading(true);
       await fetch(`${API_BASE_URL}/upload`, {
         method: "POST",
         body: formData,
@@ -50,6 +53,8 @@ function Dashboard() {
     } catch (error) {
       console.error("Upload failed:", error);
       alert("Upload failed. Please try again.");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -64,7 +69,10 @@ function Dashboard() {
 
   // 🔹 Logout
   const handleLogout = () => {
-    window.location.reload();
+    localStorage.removeItem("notes_app_logged_in");
+    if (typeof onLogout === "function") {
+      onLogout();
+    }
   };
 
   // ❤️ Like
@@ -110,7 +118,9 @@ function Dashboard() {
             type="file"
             onChange={(e) => setFile(e.target.files[0] || null)}
           />
-          <button onClick={handleUpload}>📤 Upload Note</button>
+          <button onClick={handleUpload} disabled={isUploading}>
+            {isUploading ? "Uploading..." : "📤 Upload Note"}
+          </button>
         </div>
 
         {/* Search */}

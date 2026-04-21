@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import Dashboard from "./Dashboard";
 import API_BASE_URL from "./config";
@@ -6,12 +6,21 @@ import API_BASE_URL from "./config";
 function App() {
   const [isLogin, setIsLogin] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    if (localStorage.getItem("notes_app_logged_in") === "true") {
+      setLoggedIn(true);
+    }
+  }, []);
+
   // LOGIN
   const handleLogin = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       const res = await fetch(`${API_BASE_URL}/login`, {
         method: "POST",
@@ -25,6 +34,7 @@ function App() {
 
       if (data.success) {
         alert("Login successful");
+        localStorage.setItem("notes_app_logged_in", "true");
         setLoggedIn(true);
       } else {
         alert("Invalid credentials");
@@ -32,11 +42,15 @@ function App() {
     } catch (error) {
       console.error("Login failed:", error);
       alert("Unable to login. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   // SIGNUP
   const handleSignup = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       const res = await fetch(`${API_BASE_URL}/signup`, {
         method: "POST",
@@ -57,11 +71,13 @@ function App() {
     } catch (error) {
       console.error("Signup failed:", error);
       alert("Unable to signup. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   if (loggedIn) {
-    return <Dashboard />;
+    return <Dashboard onLogout={() => setLoggedIn(false)} />;
   }
 
   return (
@@ -85,9 +101,13 @@ function App() {
       />
 
       {isLogin ? (
-        <button onClick={handleLogin}>Login</button>
+        <button onClick={handleLogin} disabled={isSubmitting}>
+          {isSubmitting ? "Logging in..." : "Login"}
+        </button>
       ) : (
-        <button onClick={handleSignup}>Signup</button>
+        <button onClick={handleSignup} disabled={isSubmitting}>
+          {isSubmitting ? "Signing up..." : "Signup"}
+        </button>
       )}
 
       <p>
