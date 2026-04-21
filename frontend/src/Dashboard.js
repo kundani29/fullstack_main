@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import API_BASE_URL from "./config";
 
 function Dashboard() {
   const [file, setFile] = useState(null);
@@ -14,7 +15,7 @@ function Dashboard() {
   // 🔹 Fetch files
   const fetchFiles = async () => {
     try {
-      const res = await fetch("http://localhost:5050/files");
+      const res = await fetch(`${API_BASE_URL}/files`);
       const data = await res.json();
       setFiles(data.files || data || []);
     } catch (err) {
@@ -35,7 +36,7 @@ function Dashboard() {
     formData.append("file", selectedFile);
 
     try {
-      await fetch("http://localhost:5050/upload", {
+      await fetch(`${API_BASE_URL}/upload`, {
         method: "POST",
         body: formData,
       });
@@ -54,7 +55,7 @@ function Dashboard() {
 
   // 🔹 Delete
   const handleDelete = async (filename) => {
-    await fetch(`http://localhost:5050/delete/${filename}`, {
+    await fetch(`${API_BASE_URL}/delete/${filename}`, {
       method: "DELETE",
     });
 
@@ -136,7 +137,7 @@ function Dashboard() {
                   {/* Actions */}
                   <div>
                     <a
-                      href={`http://localhost:5050/uploads/${f}`}
+                      href={`${API_BASE_URL}/uploads/${f}`}
                       target="_blank"
                       rel="noreferrer"
                     >

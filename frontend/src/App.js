@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import Dashboard from "./Dashboard";
+import API_BASE_URL from "./config";
 
 function App() {
   const [isLogin, setIsLogin] = useState(true);
@@ -12,7 +13,7 @@ function App() {
   // LOGIN
   const handleLogin = async () => {
     try {
-      const res = await fetch("http://localhost:5050/login", {
+      const res = await fetch(`${API_BASE_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,14 +31,14 @@ function App() {
       }
     } catch (error) {
       console.error("Login failed:", error);
-      alert("Unable to login. Please check if backend is running on port 5050.");
+      alert("Unable to login. Please try again.");
     }
   };
 
   // SIGNUP
   const handleSignup = async () => {
     try {
-      const res = await fetch("http://localhost:5050/signup", {
+      const res = await fetch(`${API_BASE_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,7 +56,7 @@ function App() {
       }
     } catch (error) {
       console.error("Signup failed:", error);
-      alert("Unable to signup. Please check if backend is running on port 5050.");
+      alert("Unable to signup. Please try again.");
     }
   };
 
