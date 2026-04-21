@@ -11,41 +11,51 @@ function App() {
 
   // LOGIN
   const handleLogin = async () => {
-    const res = await fetch("http://localhost:5050/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("http://localhost:5050/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.success) {
-      alert("Login successful");
-      setLoggedIn(true);
-    } else {
-      alert("Invalid credentials");
+      if (data.success) {
+        alert("Login successful");
+        setLoggedIn(true);
+      } else {
+        alert("Invalid credentials");
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      alert("Unable to login. Please check if backend is running on port 5050.");
     }
   };
 
   // SIGNUP
   const handleSignup = async () => {
-    const res = await fetch("http://localhost:5050/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("http://localhost:5050/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.success) {
-      alert("Signup successful");
-      setIsLogin(true);
-    } else {
-      alert("Signup failed");
+      if (data.success) {
+        alert("Signup successful");
+        setIsLogin(true);
+      } else {
+        alert("Signup failed");
+      }
+    } catch (error) {
+      console.error("Signup failed:", error);
+      alert("Unable to signup. Please check if backend is running on port 5050.");
     }
   };
 

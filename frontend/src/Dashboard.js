@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 function Dashboard() {
   const [file, setFile] = useState(null);
+  const fileInputRef = useRef(null);
   const [files, setFiles] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -27,19 +28,28 @@ function Dashboard() {
 
   // 🔹 Upload
   const handleUpload = async () => {
-    if (!file) return alert("Select file first");
+    const selectedFile = file || fileInputRef.current?.files?.[0];
+    if (!selectedFile) return alert("Select file first");
 
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", selectedFile);
 
-    await fetch("http://localhost:5050/upload", {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      await fetch("http://localhost:5050/upload", {
+        method: "POST",
+        body: formData,
+      });
 
-    alert("File uploaded");
-    setFile(null);
-    fetchFiles();
+      alert("File uploaded");
+      setFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      fetchFiles();
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert("Upload failed. Please try again.");
+    }
   };
 
   // 🔹 Delete
@@ -94,7 +104,11 @@ function Dashboard() {
 
         {/* Upload */}
         <div className="file-box">
-          <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+          <input
+            ref={fileInputRef}
+            type="file"
+            onChange={(e) => setFile(e.target.files[0] || null)}
+          />
           <button onClick={handleUpload}>📤 Upload Note</button>
         </div>
 
