@@ -12,11 +12,22 @@ function Dashboard({ onLogout }) {
   const [comments, setComments] = useState({});
   const [newComment, setNewComment] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const authToken = localStorage.getItem("notes_app_token");
+
+  const authHeaders = authToken
+    ? { Authorization: `Bearer ${authToken}` }
+    : {};
 
   // 🔹 Fetch files
   const fetchFiles = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/files`);
+      const res = await fetch(`${API_BASE_URL}/files`, {
+        headers: authHeaders,
+      });
+      if (res.status === 401) {
+        handleLogout();
+        return;
+      }
       const data = await res.json();
       setFiles(data.files || data || []);
     } catch (err) {
@@ -41,6 +52,7 @@ function Dashboard({ onLogout }) {
       setIsUploading(true);
       await fetch(`${API_BASE_URL}/upload`, {
         method: "POST",
+        headers: authHeaders,
         body: formData,
       });
 
@@ -62,6 +74,7 @@ function Dashboard({ onLogout }) {
   const handleDelete = async (filename) => {
     await fetch(`${API_BASE_URL}/delete/${filename}`, {
       method: "DELETE",
+      headers: authHeaders,
     });
 
     fetchFiles();
@@ -69,6 +82,7 @@ function Dashboard({ onLogout }) {
 
   // 🔹 Logout
   const handleLogout = () => {
+    localStorage.removeItem("notes_app_token");
     localStorage.removeItem("notes_app_logged_in");
     if (typeof onLogout === "function") {
       onLogout();
@@ -147,7 +161,9 @@ function Dashboard({ onLogout }) {
                   {/* Actions */}
                   <div>
                     <a
-                      href={`${API_BASE_URL}/uploads/${f}`}
+                      href={`${API_BASE_URL}/uploads/${f}?token=${encodeURIComponent(
+                        authToken || ""
+                      )}`}
                       target="_blank"
                       rel="noreferrer"
                     >

@@ -1,2 +1,3 @@
 .DS_Store
 backend/express/uploads/
+backend/express/data/users.json

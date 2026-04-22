@@ -12,7 +12,7 @@ function App() {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (localStorage.getItem("notes_app_logged_in") === "true") {
+    if (localStorage.getItem("notes_app_token")) {
       setLoggedIn(true);
     }
   }, []);
@@ -34,10 +34,11 @@ function App() {
 
       if (data.success) {
         alert("Login successful");
+        localStorage.setItem("notes_app_token", data.token);
         localStorage.setItem("notes_app_logged_in", "true");
         setLoggedIn(true);
       } else {
-        alert("Invalid credentials");
+        alert(data.message || "Invalid credentials");
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -65,8 +66,9 @@ function App() {
       if (data.success) {
         alert("Signup successful");
         setIsLogin(true);
+        setPassword("");
       } else {
-        alert("Signup failed");
+        alert(data.message || "Signup failed");
       }
     } catch (error) {
       console.error("Signup failed:", error);
