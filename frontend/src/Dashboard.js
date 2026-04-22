@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import API_BASE_URL from "./config";
 
 function Dashboard({ onLogout }) {
@@ -14,12 +14,21 @@ function Dashboard({ onLogout }) {
   const [isUploading, setIsUploading] = useState(false);
   const authToken = localStorage.getItem("notes_app_token");
 
-  const authHeaders = authToken
-    ? { Authorization: `Bearer ${authToken}` }
-    : {};
+  const authHeaders = useMemo(
+    () => (authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+    [authToken]
+  );
+
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem("notes_app_token");
+    localStorage.removeItem("notes_app_logged_in");
+    if (typeof onLogout === "function") {
+      onLogout();
+    }
+  }, [onLogout]);
 
   // 🔹 Fetch files
-  const fetchFiles = async () => {
+  const fetchFiles = useCallback(async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/files`, {
         headers: authHeaders,
@@ -33,11 +42,11 @@ function Dashboard({ onLogout }) {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [authHeaders, handleLogout]);
 
   useEffect(() => {
     fetchFiles();
-  }, []);
+  }, [fetchFiles]);
 
   // 🔹 Upload
   const handleUpload = async () => {
@@ -78,15 +87,6 @@ function Dashboard({ onLogout }) {
     });
 
     fetchFiles();
-  };
-
-  // 🔹 Logout
-  const handleLogout = () => {
-    localStorage.removeItem("notes_app_token");
-    localStorage.removeItem("notes_app_logged_in");
-    if (typeof onLogout === "function") {
-      onLogout();
-    }
   };
 
   // ❤️ Like
