@@ -1,17 +1,17 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "Backend server for fullstack app",
+  "description": "Express MVC backend for MERN app",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node server.js",
-    "test": "echo \"No tests\""
+    "start": "node server.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
-    "chalk": "^4.1.2",
     "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.5.0"
   },

@@ -1,3 +1,71 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background: red !important;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f7fb;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #d8deea;
+  border-radius: 8px;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  background-color: #2563eb;
+  color: white;
+  padding: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.message {
+  margin-top: 12px;
+}
+
+.alternate-action {
+  margin-top: 12px;
+}
+
+.link-button {
+  background: transparent;
+  color: #2563eb;
+  padding: 0;
 }

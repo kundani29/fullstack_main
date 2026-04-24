@@ -3,3 +3,4 @@ backend/express/uploads/
 backend/express/data/users.json
 backend/node_modules/
 frontend/node_modules/
+backend/.env
