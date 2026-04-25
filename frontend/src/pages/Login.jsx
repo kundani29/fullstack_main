@@ -8,18 +8,24 @@ function Login() {
   const handleLogin = async (formData) => {
     try {
       const data = await loginUser(formData);
-      const token = data?.token;
+      const token = data?.token || data?.accessToken || data?.data?.token;
+      const email = data?.user?.email || data?.data?.user?.email || formData.email;
 
       if (!token) {
         return { message: data?.message || "Login failed" };
       }
 
       localStorage.setItem("token", token);
-      localStorage.setItem("userEmail", data?.user?.email || formData.email);
+      localStorage.setItem("userEmail", email);
       navigate("/dashboard", { replace: true });
+      // Force a location update so route guards re-evaluate immediately in production builds.
+      window.location.assign("/dashboard");
       return { message: "Login successful" };
     } catch (error) {
-      const message = error.response?.data?.message || "Login failed";
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Login failed";
       return { message };
     }
   };
