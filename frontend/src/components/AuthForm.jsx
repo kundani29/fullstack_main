@@ -1,6 +1,15 @@
 import { useState } from "react";
 
-function AuthForm({ title, onSubmit, buttonText, alternateText, alternateLinkText, onAlternateClick }) {
+function AuthForm({
+  title,
+  onSubmit,
+  buttonText,
+  alternateText,
+  alternateLinkText,
+  onAlternateClick,
+  showNameField = false,
+}) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -11,7 +20,7 @@ function AuthForm({ title, onSubmit, buttonText, alternateText, alternateLinkTex
     setMessage("");
     setIsLoading(true);
 
-    const result = await onSubmit({ email, password });
+    const result = await onSubmit({ name, email, password });
     setMessage(result.message);
     setIsLoading(false);
   };
@@ -20,6 +29,15 @@ function AuthForm({ title, onSubmit, buttonText, alternateText, alternateLinkTex
     <div className="card">
       <h2>{title}</h2>
       <form onSubmit={handleSubmit} className="form">
+        {showNameField && (
+          <input
+            type="text"
+            placeholder="Enter full name"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            required
+          />
+        )}
         <input
           type="email"
           placeholder="Enter email"

@@ -10,6 +10,8 @@ function Login() {
       const data = await loginUser(formData);
       const token = data?.token || data?.accessToken || data?.data?.token;
       const email = data?.user?.email || data?.data?.user?.email || formData.email;
+      const name = data?.user?.name || data?.data?.user?.name || "";
+      const role = data?.user?.role || data?.data?.user?.role || "student";
 
       if (!token) {
         return { message: data?.message || "Login failed" };
@@ -17,9 +19,9 @@ function Login() {
 
       localStorage.setItem("token", token);
       localStorage.setItem("userEmail", email);
+      localStorage.setItem("userName", name);
+      localStorage.setItem("userRole", role);
       navigate("/dashboard", { replace: true });
-      // Force a location update so route guards re-evaluate immediately in production builds.
-      window.location.assign("/dashboard");
       return { message: "Login successful" };
     } catch (error) {
       const message =

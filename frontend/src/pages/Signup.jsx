@@ -8,6 +8,7 @@ function Signup() {
   const handleSignup = async (formData) => {
     try {
       await registerUser(formData);
+      navigate("/login");
       return { message: "Signup successful. Please login." };
     } catch (error) {
       const message = error.response?.data?.message || "Signup failed";
@@ -21,6 +22,7 @@ function Signup() {
         title="Signup"
         buttonText="Create Account"
         onSubmit={handleSignup}
+        showNameField
         alternateText="Already have an account?"
         alternateLinkText="Login"
         onAlternateClick={() => navigate("/login")}

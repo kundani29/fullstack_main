@@ -1,6 +1,8 @@
 .DS_Store
-backend/express/uploads/
+/node_modules/
+backend/uploads/
 backend/express/data/users.json
 backend/node_modules/
 frontend/node_modules/
+frontend/dist/
 backend/.env
