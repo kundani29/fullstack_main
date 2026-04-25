@@ -8,9 +8,15 @@ function Login() {
   const handleLogin = async (formData) => {
     try {
       const data = await loginUser(formData);
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("userEmail", data.user.email);
-      navigate("/dashboard");
+      const token = data?.token;
+
+      if (!token) {
+        return { message: data?.message || "Login failed" };
+      }
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("userEmail", data?.user?.email || formData.email);
+      navigate("/dashboard", { replace: true });
       return { message: "Login successful" };
     } catch (error) {
       const message = error.response?.data?.message || "Login failed";

@@ -8,9 +8,9 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route path="/" element={<Navigate to={token ? "/dashboard" : "/login"} replace />} />
+      <Route path="/login" element={token ? <Navigate to="/dashboard" replace /> : <Login />} />
+      <Route path="/signup" element={token ? <Navigate to="/dashboard" replace /> : <Signup />} />
       <Route
         path="/dashboard"
         element={token ? <Dashboard /> : <Navigate to="/login" replace />}
