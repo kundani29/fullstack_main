@@ -8,6 +8,7 @@ import {
   fetchNoteById,
   likeNote,
   saveNote,
+  deleteNote,
 } from "../services/api";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
@@ -85,7 +86,7 @@ function NoteDetail() {
   // 🗑️ DELETE (NEW)
   const handleDelete = async () => {
     try {
-      await axios.delete(`${API_URL}/delete/${id}`);
+      await deleteNote(id);
       alert("Note deleted successfully");
       navigate("/dashboard");
     } catch (error) {

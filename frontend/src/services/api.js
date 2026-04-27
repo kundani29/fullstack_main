@@ -102,7 +102,7 @@ export const fetchUsers = async () => {
   return response.data;
 };
 
-export const deleteNoteById = async (id) => {
+export const deleteNote = async (id) => {
   assertApiBaseUrl();
   const response = await api.delete(`/api/notes/${id}`);
   return response.data;
