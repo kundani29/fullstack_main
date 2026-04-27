@@ -85,7 +85,7 @@ function NoteDetail() {
   // 🗑️ DELETE (NEW)
   const handleDelete = async () => {
     try {
-      await axios.delete(`${API_URL}/notes/${id}`);
+      await axios.delete(`${API_URL}/delete/${id}`);
       alert("Note deleted successfully");
       navigate("/dashboard");
     } catch (error) {
