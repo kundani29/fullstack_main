@@ -188,20 +188,22 @@ const saveNote = async (req, res) => {
 const deleteNote = async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
+
     if (!note) {
       return res.status(404).json({ message: "Note not found" });
     }
 
-    await Promise.all([
-      Note.deleteOne({ _id: note._id }),
-      Like.deleteMany({ noteId: note._id }),
-      Comment.deleteMany({ noteId: note._id }),
-      SavedNote.deleteMany({ noteId: note._id }),
-    ]);
+    // ✅ Check if the logged-in user is the uploader
+    if (note.uploadedBy.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized to delete this note" });
+    }
 
-    return res.status(200).json({ message: "Note deleted successfully" });
+    await note.deleteOne();
+
+    res.json({ message: "Note deleted successfully" });
+
   } catch (error) {
-    return res.status(500).json({ message: "Failed to delete note", error: error.message });
+    res.status(500).json({ message: "Delete failed" });
   }
 };
 

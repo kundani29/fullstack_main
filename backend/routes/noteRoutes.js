@@ -21,6 +21,6 @@ router.post("/:id/like", protect, likeNote);
 router.post("/:id/comment", protect, addComment);
 router.get("/:id/comments", getComments);
 router.post("/:id/save", protect, saveNote);
-router.delete("/:id", protect, requireAdmin, deleteNote);
+router.delete("/:id", protect, deleteNote);
 
 module.exports = router;
