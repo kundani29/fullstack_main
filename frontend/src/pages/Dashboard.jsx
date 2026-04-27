@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import NoteCard from "../components/NoteCard";
-import { deleteNoteById, fetchMyProfile, fetchMySavedNotes, fetchMyUploads, fetchUsers } from "../services/api";
+import { deleteNote, fetchMyProfile, fetchMySavedNotes, fetchMyUploads, fetchUsers } from "../services/api";
 
 function Dashboard() {
   const [profile, setProfile] = useState(null);
@@ -39,7 +39,7 @@ function Dashboard() {
 
   const handleDeleteNote = async (noteId) => {
     try {
-      await deleteNoteById(noteId);
+      await deleteNote(noteId);
       loadData();
     } catch (err) {
       setError(err.response?.data?.message || "Failed to delete note");
